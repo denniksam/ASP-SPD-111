@@ -14,6 +14,39 @@
     Властивість "Model" є тим параметром, що передається з виклику 
     <code>return View(model);</code>
 </p>
+<p>
+    Моделі умовно поділяються за своїм призначенням.<br />
+    ViewModel (PageModel) - набір даних для представлення<br />
+    FormModel - дані від представлення (html-form)<br />
+    Entity (DTO) - об'єкти, які відображають дані у сховищі (частіше
+    за все - у БД)
+</p>
+<p>
+    Передача даних форм спряжена з додатковою проблемою повторного
+    надсилання даних при оновленні сторінки. Відповідно, запит, який
+    приймає дані, має завершитись перенаправленням (Redirect).
+    Це змусить браузер надіслати повторний запит без параметрів.
+    Але з боку сервера слід реалізувати збереження даних між запитами.
+    Для цього слугує механізм сесій.
+    <b>Сесія (НТТР-сесія)</b> - механізм збереження даних на боці 
+    сервера з їх прив'язуванням до запиту шляхом Cookie-параметрів.
+</p>
+<form asp-action="ProcessTransferForm" method="post">
+    <div class="input-group">
+        <span class="input-group-text">First and last name</span>
+        <input name="user-firstname" type="text" aria-label="First name" class="form-control">
+        <input name="user-lastname" type="text" aria-label="Last name" class="form-control">
+    </div>
+    <button class ="btn btn-secondary">Send</button>
+</form>
+@if(Model.FormModel?.UserFirstname != null)
+{
+    <p>
+        Є передача даних форми: 
+        @Model.FormModel.UserFirstname,
+        @Model.FormModel.UserLastname
+    </p>
+}
 <table class="table table-hover">
     <thead>
         <tr>

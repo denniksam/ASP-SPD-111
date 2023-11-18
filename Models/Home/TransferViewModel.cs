@@ -8,5 +8,6 @@
         public DateOnly Date { get; set; }
         public TimeOnly Time { get; set; }
         public String ControllerName { get; set; } = null!;
+        public TransferFormModel? FormModel { get; set; }
     }
 }
