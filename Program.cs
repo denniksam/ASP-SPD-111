@@ -1,14 +1,42 @@
+using ASP_SPD_111.Data;
 using ASP_SPD_111.Services.Hash;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using MySqlConnector;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// додаємо до конфігурації файл з даними підключення БД
+builder.Configuration.AddJsonFile("dbsettings.json");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Реєструємо власні сервіси
+// Реєструємо власні сервіси ...
 builder.Services.AddSingleton<IHashService, Sha1HashService>();
+// ... та контекст даних
+String? connectionString = 
+    builder
+    .Configuration
+    .GetConnectionString("PlanetScale");
 
+MySqlConnection connection = new(connectionString);
 
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(
+        connection,
+        ServerVersion.AutoDetect(connection),
+        serverOptions =>
+            serverOptions
+            .MigrationsHistoryTable(
+                tableName: HistoryRepository.DefaultTableName,
+                schema: "ASP_SPD_111")
+            .SchemaBehavior(
+                MySqlSchemaBehavior.Translate,
+                (schema, table) => $"{schema}_{table}")
+    )
+);
 
 
 builder.Services.AddDistributedMemoryCache();

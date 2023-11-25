@@ -81,6 +81,10 @@ namespace ASP_SPD_111.Controllers
             return View();
         }
 
+        public ViewResult Db()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
