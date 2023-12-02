@@ -5,6 +5,7 @@ namespace ASP_SPD_111.Data
     public class DataContext : DbContext
     {
         public DbSet<Entities.User> Users { get; set; }
+        public DbSet<Entities.LoginJournalItem> LoginJournal { get; set; }
 
         public DataContext(DbContextOptions options) : base(options)
         { }
