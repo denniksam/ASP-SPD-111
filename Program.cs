@@ -1,4 +1,5 @@
 using ASP_SPD_111.Data;
+using ASP_SPD_111.Middleware;
 using ASP_SPD_111.Services.Hash;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -43,7 +44,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -66,6 +67,9 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseSession();
+
+// включення нашого Middleware у ланцюг
+app.UseMiddleware<AuthSessionMiddleware>();
 
 app.MapControllerRoute(
     name: "default",
